@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>喜人奇妙夜 - 幕后花絮</title>
+    <style>
+        /* 全局重置 + 主题变量 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Microsoft YaHei", "PingFang SC", sans-serif;
+        }
+
+        :root {
+            --primary: #FF9500;
+            --accent: #FF3B58;
+            --bg-dark: #121212;
+            --bg-card: #1E1E1E;
+            --text-white: #FFFFFF;
+            --text-gray: #B3B3B3;
+            --border: #333333;
+            --bubble-blue: #E6F2FF;
+            --bubble-green: #F2FFE6;
+            --bubble-blue-border: #4080FF;
+            --bubble-green-border: #7CCD7C;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-white);
+            overflow-x: hidden;
+        }
+
+        /* 顶部导航栏 */
+        .top-bar {
+            height: 60px;
+            background-color: var(--bg-dark);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 999;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 22px;
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        .search-box {
+            flex: 0 1 500px;
+            height: 40px;
+            background-color: var(--bg-card);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            padding: 0 15px;
+        }
+
+        .search-box input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            outline: none;
+            color: var(--text-white);
+            font-size: 16px;
+        }
+
+        .search-box input::placeholder {
+            color: var(--text-gray);
+        }
+
+        .search-box .search-btn {
+            width: 30px;
+            height: 30px;
+            background: transparent;
+            border: none;
+            color: var(--text-gray);
+            font-size: 18px;
+            cursor: pointer;
+        }
+
+        .top-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .top-right a {
+            color: var(--text-gray);
+            text-decoration: none;
+            font-size: 14px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2px;
+        }
+
+        .top-right a:hover {
+            color: var(--primary);
+        }
+
+        .top-right .icon {
+            font-size: 20px;
+            width: 24px;
+            text-align: center;
+        }
+
+        /* 登录按钮 */
+        .user-avatar {
+            width: auto;
+            height: 32px;
+            line-height: 32px;
+            padding: 0 16px;
+            border-radius: 16px;
+            background-color: rgba(255,255,255,0.63);
+            color: #222;
+            font-size: 14px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            border: none;
+        }
+
+        /* 主体布局 */
+        .main-container {
+            display: flex;
+            min-height: calc(100vh - 60px);
+        }
+
+        /* 左侧侧边栏 */
+        .sidebar {
+            width: 180px;
+            background-color: var(--bg-dark);
+            padding: 20px 0;
+            border-right: 1px solid var(--border);
+        }
+
+        .sidebar ul {
+            list-style: none;
+        }
+
+        .sidebar li {
+            margin-bottom: 8px;
+        }
+
+        .sidebar a {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 25px;
+            color: var(--text-gray);
+            text-decoration: none;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+
+        .sidebar a:hover, .sidebar a.active {
+            color: var(--primary);
+            background-color: rgba(255, 149, 0, 0.1);
+        }
+
+        .sidebar .icon {
+            font-size: 20px;
+            width: 24px;
+            text-align: center;
+        }
+
+        /* 右侧内容区域 */
+        .content {
+            flex: 1;
+            padding: 30px 40px;
+            overflow-y: auto;
+            background-color: var(--bg-dark);
+        }
+        .content-title {
+            font-size: 28px;
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+        .content-desc {
+            color: var(--text-gray);
+            margin-bottom: 30px;
+            font-size: 16px;
+        }
+        .section {
+            background-color: var(--bg-card);
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 20px;
+            border: 1px solid var(--border);
+        }
+        .section h2 {
+            color: var(--primary);
+            font-size: 20px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .section p {
+            color: var(--text-white);
+            line-height: 1.8;
+            margin-bottom: 12px;
+            font-size: 15px;
+        }
+        .highlight {
+            color: var(--accent);
+            font-weight: bold;
+        }
+
+        /* 毕业寄语墙 聊天气泡样式（加宽优化） */
+        .bubble-wall {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+            margin-top: 10px;
+        }
+        .bubble {
+            max-width: 92%;
+            width: 92%;
+            padding: 16px 20px;
+            border-radius: 18px;
+            font-size: 16px;
+            line-height: 1.7;
+            position: relative;
+            word-break: break-word;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .bubble.blue {
+            align-self: flex-start;
+            background-color: var(--bubble-blue);
+            color: #003399;
+            border: 2px solid var(--bubble-blue-border);
+            border-bottom-left-radius: 6px;
+        }
+        .bubble.blue::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: -10px;
+            width: 0;
+            height: 0;
+            border: 10px solid transparent;
+            border-right-color: var(--bubble-blue-border);
+            border-left: 0;
+            border-bottom: 0;
+        }
+        .bubble.blue::before {
+            content: "";
+            position: absolute;
+            bottom: 2px;
+            left: -8px;
+            width: 0;
+            height: 0;
+            border: 8px solid transparent;
+            border-right-color: var(--bubble-blue);
+            border-left: 0;
+            border-bottom: 0;
+            z-index: 1;
+        }
+        .bubble.green {
+            align-self: flex-end;
+            background-color: var(--bubble-green);
+            color: #006600;
+            border: 2px solid var(--bubble-green-border);
+            border-bottom-right-radius: 6px;
+        }
+        .bubble.green::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            right: -10px;
+            width: 0;
+            height: 0;
+            border: 10px solid transparent;
+            border-left-color: var(--bubble-green-border);
+            border-right: 0;
+            border-bottom: 0;
+        }
+        .bubble.green::before {
+            content: "";
+            position: absolute;
+            bottom: 2px;
+            right: -8px;
+            width: 0;
+            height: 0;
+            border: 8px solid transparent;
+            border-left-color: var(--bubble-green);
+            border-right: 0;
+            border-bottom: 0;
+            z-index: 1;
+        }
+
+        footer {
+            background-color: var(--bg-dark);
+            border-top: 1px solid var(--border);
+            padding: 30px 40px;
+            text-align: center;
+            color: var(--text-gray);
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+
+<!-- 顶部导航 -->
+<div class="top-bar">
+    <div class="logo">
+        <span style="font-size:28px;">🎉</span>
+        <span>喜人系列</span>
+    </div>
+    <div class="search-box">
+        <input type="text" placeholder="只要大声笑 烦恼都丢掉！">
+        <button class="search-btn">🔍</button>
+    </div>
+    <div class="top-right">
+        <a href="#"><span class="icon">V</span><span>会员</span></a>
+        <a href="#"><span class="icon">🎮</span><span>游戏</span></a>
+        <a href="#"><span class="icon">⚡</span><span>快捷</span></a>
+        <a href="#"><span class="icon">🕒</span><span>历史</span></a>
+        <a href="#"><span class="icon">🎥</span><span>创作</span></a>
+        <a href="#"><span class="icon">🔗</span><span>应用</span></a>
+        <div class="user-avatar">登录</div>
+    </div>
+</div>
+
+<!-- 主体：左侧菜单 + 右侧内容 -->
+<div class="main-container">
+    <!-- 左侧侧边导航 -->
+    <div class="sidebar">
+        <ul>
+            <li><a href="首页.html"  ><span class="icon">⭐</span><span>首页</span></a></li>
+            <li><a href="人物专访.html" ><span class="icon">📺</span><span>人物专访</span></a></li>
+            <li><a href="喜人阵容.html" ><span class="icon">🎭</span><span>喜人阵容</span></a></li>
+            <li><a href="精彩片段.html"><span class="icon">🎬</span><span>精彩片段</span></a></li>
+            <li><a href="精彩片段.html"><span class="icon">🎤</span><span>幕后花絮</span></a></li>
+            <li><a href="精彩图集.html"><span class="icon">📸</span><span>精彩图集</span></a></li>
+            <li><a href="喜人题库.html"><span class="icon">📰</span><span>喜人题库</span></a></li>
+            <li><a href="福利中心.html" class="active"><span class="icon">🎁</span><span>福利中心</span></a></li>
+            <li><a href="VIP会员.html"><span class="icon">V</span><span>VIP会员</span></a></li>
+            <li><a href="商务合作.html"><span class="icon">🤝</span><span>商务合作</span></a></li>
+        </ul>
+    </div>
+
+    <!-- 右侧内容区：幕后花絮完整内容 -->
+    <div class="content">
+        <h1 class="content-title">喜人幕后大爆料</h1>
+        <p class="content-desc">你不知道的30个秘密故事</p>
+
+        <div class="section">
+            <p style="text-align:center; font-weight:bold; margin-top:10px;">《喜人奇妙夜第二季》正式收官啦！台前的故事看了很多，观众朋友们对幕后故事也十分感兴趣。</p>
+            <p style="text-align:center; font-weight:bold; margin-top:10px;">节目里车台究竟是如何运作的？录制时演员的麦藏在哪里？节目录制幕后有什么趣事发生？</p>
+            <p style="text-align:center; font-weight:bold; margin-top:10px;">今天让我们转换视角，看看在你看不到的角落，那些你好奇的、生动的、多角度的幕后故事。</p>
+        </div>
+
+        <div class="section">
+            <h2>🎪 舞台篇</h2>
+            <p>1. 节目后台的车台可以看成一个巨型的华容道，一个作品一个车台一个小方块。录制前，工作人员会排布方块顺序，由机械控制机转动，从上场口逆时针旋转到主舞台录制，录制完一个景车台开走，下一个景上场。</p>
+            <p>2. 喜人正式录制时的麦克风收音，其实是藏在演员全程穿着的最里层服装内的，麦包绑在腰上，麦头贴在衣物领口位置。不同角色藏的位置会有不同，《盲盒》里有很多厚厚的玩偶服和头套，如果戴在胸前会导致声音闷，所以小熊/发条/蛤蟆的麦都是藏在头套里的。</p>
+            <p>3. 演员每次正式录制上场前，会有测试麦克风环节，通常来讲是“123，321”，有个别演员的试音内容太过个性化给现场导演留下深刻印象，例如：李梓溪每次都会说“机器人，机器人。”逗逗会说“生活是字，键盘是笔，女王是我！”李飞会报手机号“喂喂喂，幺三五，幺三七”......</p>
+            <p>4. 每一个作品服饰都是服装组老师们根据作品主题定制制作的，这一季最难做的衣服是《羊来咯》全体动物服。作品里6只动物品种不同，人偶服用到的材质既需要贴合实际又要有所区分。前期设计较为复杂，进厂后发现6套衣服需要全部调整大小，服装老师们猛干20多小时，在服装间被动物毛完全淹没之前赶制成功。</p>
+            <p>5. 《花园网吧》酷滕粉色帽衫上的星星装饰是为了防止服装颜色单调特意缝上去的。</p>
+        </div>
+
+        <div class="section">
+            <h2>✍️ 创作指导篇</h2>
+            <p>1. 刘天池老师指导表演时印象最深刻的演员是高海宝。起初天池老师对海宝比较陌生，觉得海宝戴个眼镜像是程序员在演东西，后来会莫名其妙被他身上的很多小节奏 and 黑色幽默吸引，发现他是个宝藏。高海宝之前是学相声的，是逗哏。天池老师认为他塑造角色从人物出发，有自己对喜剧独到的理解和节奏，很亮眼。</p>
+            <p>2. 小力士组的张呈和雷淞然，会把自己的编剧刘三瞳关在酒店房间里“逼他创作”。</p>
+            <p>3. 当我们询问刘三瞳是否真的遭受了创作逼迫后他说：“没有，雷子和张呈对我都很好，没有强迫和虐待我，没有把我关起来写本，也没有说写不完不给吃饭睡觉，我可能在别的社交平台说了些胡话，大家别当真。”</p>
+            <p>6. 刘三瞳说《四个大人》是本季创作最困难的本子，多人本有难度，再加上那个赛段《技能五子棋》的热度媲美当年的《老鼠爱大米》，完全被那个旋律洗脑，算是一种魔法攻击，让人无法沉心创作，整体就比较艰难。</p>
+            <p>7. 刘三瞳很惊喜的发现本子里的小细节小设计基本上都被大家发现了，且有一些原本不存在的小设计也被大家设计出来了，惊叹于大家的才华，“也许好的作品真的会有无限种解读，哎！！”</p>
+            <p>8. 外星从与他们的编剧翟小明为了参加总决赛颁奖典礼，提前吃了好几天减脂餐，想要保持一下形象。编剧因为太饿点了鸡肉串，被外星从制止，说坚持一下明天就颁奖了。</p>
+            <p>9. 外星从和编剧翟小明本身设想颁奖典礼时，三个人齐刷刷穿技能五子棋的文化t亮相，结果当天张兴朝和李嘉诚临时变卦穿了帅气西装，被翟小明指责后两个人帅气的逃跑了。（其实西装里一直穿着五子棋t恤）</p>
+        </div>
+
+        <div class="section">
+            <h2>🎬 后期剪辑篇</h2>
+            <p>1. 这一季后期组开始在字幕上狠狠创新，加入众多表情包：要爆啦、全场6元......字幕老师们沉浸在自己的创作里无法自拔。</p>
+            <p>2. 令后期组满意的剪辑小设计包括但不限于：运动会雷子划出去的企鹅回头；《安可》里的 这样这样这样这样这样（出画）；《坏小子》里，first到FIRST电影节，特意改成了大写因为据说FIRST电影节官称要大写；《风云再起》里，虚弱的半透明“喂”；王男当逗号用的top小队颁奖小片。</p>
+            <p>3. After Party最后一次审片前一天，剪辑老师临时刷到了刘旸的“你在开什么玩笑”和松导的“搞笑”，连夜把这两句话剪进去，绝不放过要拯救世界的教主。</p>
+        </div>
+
+        <div class="section">
+            <h2>🖼️ 视觉海报篇</h2>
+            <p>1. 平面表现力最强的喜人是张兴朝，八仙子成团伦巴的海报把工作人员和他都拍爽了，他一边跳一边自己喊爽到了，并且每次都会按照海报创意给到最合适的动作和表情，非常活生生的人类，有视觉张力的牛爷爷。</p>
+            <p>2. 张弛拍照状态和一喜相比判若两人，摇身一变成为时尚明星。他会在拍的时候得意的问工作人员，自己是不是进步非常大。</p>
+            <p>3. 土豆的倒退伦巴之术与张兴朝并列评为表现力之王。</p>
+            <p>4. 最不擅长摆动作的喜人是高海宝，要了老命。最擅长的是蒋易，全自动模特令设计组安心。</p>
+            <p>5. 双高胎是每次拍摄海报时对比最强的一组，一个很擅长一个很不擅长。</p>
+        </div>
+
+        <div class="section">
+            <h2>🎮 衍生节目篇</h2>
+            <p>1. 每个衍生节目小游戏在登上节目之前都曾通过衍生组的反复测试，不好笑惩罚室第三期的乒乓球五子棋，节目组测试了七遍，经过数次调试呈现出现在的效果。</p>
+            <p>2. 衍生节目也有综艺之神降临的时刻。课间游戏第八期，松天硕一人单挑七人是吕严现场想出的玩法，前所未有的较量，当即所有工作人员的眼睛都被点亮了。倒计时结束，松天硕挑战成功，全场爆发出巨大的欢呼声与尖叫声，松导用自己的超强肢体为所有人带来了意外之喜。</p>
+            <p>3. 喜人聚会狼人杀第二次高玩局，JY参赛，由于技术太过于高超，衍生节目导演全神贯注的听讲还是没跟上，令人折服。</p>
+            <p>4. 关于吕严爱徒手吃夏威夷果这件小事。在某一期节目里，吕严偶然发现一种神奇坚果很好吃但是很坚硬，于是用他更坚硬的牙齿咬开享用，过程中没有使用任何工具。后面录制的时候发现零食桌上没有夏威夷果还会向导演询问，全部衍生节目录制结束后导演特地买了两包夏威夷果赠与吕严（附带工具），感谢他对衍生节目和夏威夷果的热爱。</p>
+            <p>5. 有一次录制过程中，孙天宇对场外的导演说：“聚会太好玩了吧，我下次还要来。”那一刻衍生导演特别有成就感，感到无比幸福。</p>
+        </div>
+
+        <!-- 毕业寄语墙：加宽气泡版 -->
+        <div class="section">
+            <h2>💌 毕业寄语墙</h2>
+            <div class="bubble-wall">
+                <div class="bubble blue">很荣幸参与本季喜人奇妙夜！<br>希望大家毕业后的前路也尽是坦途~</div>
+                <div class="bubble green">快乐，是我对你们唯一的祝福！</div>
+                <div class="bubble blue">希望我的创作热情不会熄灭  永远保持学习探索谦卑的精神，越走越远  祝大家都能挣大钱  希望节目能继续办下去<br>继续带给观众眼前一亮的喜剧形式和节目可能性</div>
+                <div class="bubble green">爱与快乐是初心，只要日日问初心无愧<br>就能自然而然地遇见美好的结果。</div>
+                <div class="bubble blue">努力成为最厉害的大人吧</div>
+                <div class="bubble green">往事堪堪亦澜澜，前路漫漫亦灿灿！</div>
+                <div class="bubble blue">每年竭尽全力一番，大幕落下一切清零重新开始</div>
+                <div class="bubble green">春播夏种秋收冬藏，农民伯伯一般安心踏实，明年见！</div>
+                <div class="bubble blue">我希望未来可以有更新的创意形式，可以在舞台上跟更多优秀的人去一起切磋。</div>
+                <div class="bubble green">砖永远搬不完，路永远也铺不完，过去的已经过去，我们要尽快的去面对更好的未来。</div>
+                <div class="bubble blue">跟着喜人这个系列四年啦，每一年都觉得做这个节目很幸福，从前期到后期所有人都在挥洒自己的幽默和小才华，就像主题曲说的：无法成为六边形战士的我们让你快乐也是件了不起的事</div>
+                <div class="bubble green">这是一档很奇妙的节目，每个工作人员都是那么的认真谨慎，制作链条上的每一个节拍需要严丝合缝，好像不这么做快乐就会溜走</div>
+                <div class="bubble blue">作为后期的一员，很开心成为了快乐的传播者，我们拥抱快乐 也永远向快乐出发</div>
+                <div class="bubble green">毕业快乐，感恩相遇，期待再会！一切的发生都有利于我们！</div>
+                <div class="bubble blue">我们辛苦啦！！爱你喜夜，再见！</div>
+                <div class="bubble green">完整了，干了3年后期了，好像守护成了我的习惯，很开心看到节目和喜人们越来越好，我们都是真实一同成长的，我们一起做出更好的节目吧～</div>
+                <div class="bubble blue">to自己：欢迎来到有周末的世界！喝吧！to节目：喜剧，下个路口见！</div>
+                <div class="bubble green">祝你我！祝喜夜！祝未来！希望我们能和喜剧一起，永远做快乐的小孩</div>
+                <div class="bubble blue">每个人都是争气的小东西，希望下一季快点来，我们下次再见！</div>
+            </div>
+        </div>
+
+        <div class="section">
+            <p style="text-align:center; font-weight:bold; margin-top:10px;">在你不知道的秘密故事里，大家都在努力地创造幸福</p>
+            <p style="text-align:center; font-weight:bold; margin-top:10px;">六个月的日日夜夜不易，喜剧带给我们在这个秋冬的独家回忆，平凡的小事里也藏着很多快乐的瞬间。</p>
+            <p style="text-align:center; font-weight:bold; margin-top:10px;"><span class="highlight">感谢喜人的坚持，送上最诚挚的祝福，祝未来一切都好，祝喜剧与你同行！</span></p>
+            <p style="margin-top:15px; font-style:italic; text-align:center;">“当阳光亲吻你的沃土，狂风吹刮你的橡树，我们的心永远与你一起跳动”</p>
+            <p style="text-align:center; font-weight:bold; margin-top:10px;">喜剧万岁，快乐万岁！</p>
+        </div>
+    </div>
+</div>
+
+<!-- 底部 -->
+<footer>
+    <p>喜人奇妙夜</p>
+    <p>AMAZING NIGHT</p>
+</footer>
+
+</body>
+</html>

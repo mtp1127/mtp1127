@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>喜人奇妙夜 - 精彩片段</title>
+    <style>
+        /* 全局重置 + 主题变量 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Microsoft YaHei", "PingFang SC", sans-serif;
+        }
+
+        :root {
+            --primary: #FF9500;
+            --accent: #FF3B58;
+            --bg-dark: #121212;
+            --bg-card: #1E1E1E;
+            --text-white: #FFFFFF;
+            --text-gray: #B3B3B3;
+            --border: #333333;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            background-image:
+                radial-gradient(circle at 10% 20%, rgba(255,149,0,0.05) 0%, transparent 20%),
+                radial-gradient(circle at 90% 80%, rgba(255,59,88,0.05) 0%, transparent 20%);
+            color: var(--text-white);
+            overflow-x: hidden;
+        }
+
+        /* 滚动条美化 */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #444;
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #111;
+        }
+
+        /* 顶部导航栏 */
+        .top-bar {
+            height: 60px;
+            background-color: var(--bg-dark);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 999;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.5);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 22px;
+            font-weight: bold;
+            background: linear-gradient(90deg, #FF9500, #FF3B58);
+            -webkit-background-clip: text;
+            color: transparent;
+        }
+
+        .search-box {
+            flex: 0 1 500px;
+            height: 40px;
+            background: linear-gradient(to right, #1a1a1a, #242424);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            padding: 0 15px;
+            border: 1px solid #333;
+            box-shadow: inset 0 0 8px rgba(0,0,0,0.3);
+        }
+
+        .search-box input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            outline: none;
+            color: var(--text-white);
+            font-size: 16px;
+        }
+
+        .search-box input::placeholder {
+            color: var(--text-gray);
+        }
+
+        .search-box .search-btn {
+            width: 30px;
+            height: 30px;
+            background: transparent;
+            border: none;
+            color: var(--text-gray);
+            font-size: 18px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .search-box .search-btn:hover {
+            color: var(--primary);
+            transform: scale(1.1);
+        }
+
+        .top-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .top-right a {
+            color: var(--text-gray);
+            text-decoration: none;
+            font-size: 14px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2px;
+            transition: 0.3s;
+        }
+
+        .top-right a:hover {
+            color: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        .top-right .icon {
+            font-size: 20px;
+        }
+
+        /* 登录按钮 */
+        .user-avatar {
+            height: 32px;
+            line-height: 32px;
+            padding: 0 16px;
+            border-radius: 16px;
+            background: linear-gradient(90deg, #FF9500, #FF703A);
+            color: #fff;
+            font-size: 14px;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            border: none;
+            box-shadow: 0 3px 8px rgba(255,149,0,0.2);
+            transition: 0.3s;
+        }
+        .user-avatar:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 12px rgba(255,149,0,0.35);
+        }
+
+        /* 主体布局 */
+        .main-container {
+            display: flex;
+            min-height: calc(100vh - 60px);
+        }
+
+        /* 左侧侧边栏 */
+        .sidebar {
+            width: 180px;
+            background-color: var(--bg-dark);
+            padding: 20px 0;
+            border-right: 1px solid var(--border);
+        }
+
+        .sidebar ul {
+            list-style: none;
+        }
+
+        .sidebar li {
+            margin-bottom: 8px;
+        }
+
+        .sidebar a {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 25px;
+            color: var(--text-gray);
+            text-decoration: none;
+            font-size: 16px;
+            border-radius: 8px;
+            margin: 0 10px;
+            transition: all 0.3s;
+        }
+
+        .sidebar a:hover, .sidebar a.active {
+            color: var(--primary);
+            background: rgba(255, 149, 0, 0.1);
+            box-shadow: 0 0 10px rgba(255,149,0,0.1);
+            padding-left: 30px;
+        }
+
+        .sidebar .icon {
+            font-size: 20px;
+            width: 24px;
+            text-align: center;
+        }
+
+        /* 右侧内容区域 */
+        .content {
+            flex: 1;
+            padding: 30px 40px;
+            overflow-y: auto;
+        }
+
+        .section-title {
+            font-size: 28px;
+            font-weight: bold;
+            background: linear-gradient(90deg, #FF9500, #FF3B58, #FF9500);
+            -webkit-background-clip: text;
+            color: transparent;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .title-line {
+            height: 3px;
+            width: 60px;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            border-radius: 3px;
+            margin-bottom: 30px;
+        }
+
+        /* 分类导航 */
+        .tab-nav {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+        .tab-item {
+            padding: 8px 20px;
+            border-radius: 30px;
+            background: #1E1E1E;
+            border: 1px solid #333;
+            color: #ccc;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 15px;
+        }
+        .tab-item.active {
+            background: linear-gradient(90deg, #);
+            color: #fff;
+            border-color: #FF9500;
+            font-weight: 500;
+        }
+        .tab-item:hover:not(.active) {
+            border-color: #555;
+            color: #fff;
+        }
+
+        /* 视频网格布局 */
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
+            gap: 30px;
+        }
+
+        /* 视频卡片 */
+        .video-card {
+            background: linear-gradient(145deg, #222, #181818);
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid #333;
+            transition: all 0.4s;
+            position: relative;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+        }
+
+        .video-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 14px 30px rgba(0,0,0,0.5), 0 0 20px rgba(255,149,0,0.1);
+            border-color: #555;
+        }
+
+        /* 角标 */
+        .video-tag {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            background: rgba(255,149,0,0.9);
+            color: #000;
+            font-size: 12px;
+            font-weight: bold;
+            padding: 3px 8px;
+            border-radius: 6px;
+            z-index: 2;
+        }
+
+        /* 视频播放器 */
+        .video-player {
+            width: 100%;
+            height: 190px;
+            object-fit: cover;
+            display: block;
+            background: #000;
+        }
+
+        /* 视频信息 */
+        .video-info {
+            padding: 18px;
+        }
+
+        .video-title {
+            font-size: 17px;
+            color: var(--text-white);
+            margin-bottom: 8px;
+            font-weight: 500;
+            line-height: 1.4;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .video-desc {
+            font-size: 13px;
+            color: var(--text-gray);
+            line-height: 1.5;
+        }
+
+        footer {
+            background-color: var(--bg-dark);
+            border-top: 1px solid var(--border);
+            padding: 35px 40px;
+            text-align: center;
+            color: var(--text-gray);
+            font-size: 15px;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.4);
+        }
+        footer p {
+            margin-bottom: 8px;
+        }
+        footer p:last-child {
+            background: linear-gradient(90deg, #FF9500, #FF3B58);
+            -webkit-background-clip: text;
+            color: transparent;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+
+<!-- 顶部导航 -->
+<div class="top-bar">
+    <div class="logo">
+        <span style="font-size:28px;">🎉</span>
+        <span>喜人系列</span>
+    </div>
+    <div class="search-box">
+        <input type="text" placeholder="只要大声笑 烦恼都丢掉！">
+        <button class="search-btn">🔍</button>
+    </div>
+    <div class="top-right">
+        <a href="#"><span class="icon">V</span><span>会员</span></a>
+        <a href="#"><span class="icon">🎮</span><span>游戏</span></a>
+        <a href="#"><span class="icon">⚡</span><span>快捷</span></a>
+        <a href="#"><span class="icon">🕒</span><span>历史</span></a>
+        <a href="#"><span class="icon">🎥</span><span>创作</span></a>
+        <a href="#"><span class="icon">🔗</span><span>应用</span></a>
+        <div class="user-avatar">登录</div>
+    </div>
+</div>
+
+<!-- 主体：左侧菜单 + 右侧视频内容 -->
+<div class="main-container">
+    <!-- 左侧侧边导航 -->
+    <div class="sidebar">
+        <ul>
+            <li><a href="首页.html"  ><span class="icon">⭐</span><span>首页</span></a></li>
+            <li><a href="人物专访.html" ><span class="icon">📺</span><span>人物专访</span></a></li>
+            <li><a href="喜人阵容.html" ><span class="icon">🎭</span><span>喜人阵容</span></a></li>
+            <li><a href="精彩片段.html" class="active"><span class="icon">🎬</span><span>精彩片段</span></a></li>
+            <li><a href="精彩片段.html"><span class="icon">🎤</span><span>幕后花絮</span></a></li>
+            <li><a href="精彩图集.html"><span class="icon">📸</span><span>精彩图集</span></a></li>
+            <li><a href="喜人题库.html"><span class="icon">📰</span><span>喜人题库</span></a></li>
+            <li><a href="福利中心.html"><span class="icon">🎁</span><span>福利中心</span></a></li>
+            <li><a href="VIP会员.html"><span class="icon">V</span><span>VIP会员</span></a></li>
+            <li><a href="商务合作.html"><span class="icon">🤝</span><span>商务合作</span></a></li>
+        </ul>
+    </div>
+
+    <!-- 右侧：精彩片段视频区域 -->
+    <div class="content">
+        
+        <!-- 分类切换栏 -->
+        <div class="tab-nav">
+            <div class="tab-item active" data-cate="all">全部</div>
+            <div class="tab-item" data-cate="hot">混剪高光</div>
+            <div class="tab-item" data-cate="laugh">喜人聚会</div>
+            <div class="tab-item" data-cate="behind">幕后花絮</div>
+            <div class="tab-item" data-cate="highlight">小队纯享</div>
+        </div>
+
+        <div class="video-grid">
+            <!-- 视频1 精选热门 -->
+
+            <!-- 视频2 爆笑 -->
+            <div class="video-card" data-cate="all laugh">
+                
+                <video class="video-player" controls preload="metadata">
+                    <source src="video/X1.mp4" type="video/mp4">
+                    您的浏览器不支持视频播放
+                </video>
+                <div class="video-info">
+                    <div class="video-title">喜人聚会 · 名场面</div>
+                    <div class="video-desc">取名鬼才</div>
+                </div>
+            </div>
+            
+            
+            <div class="video-card" data-cate="all highlight">
+                
+                <video class="video-player" controls preload="metadata">
+                    <source src="video/D3.mp4" type="video/mp4">
+                    您的浏览器不支持视频播放
+                </video>
+                <div class="video-info">
+                    <div class="video-title">全场欢呼 · 高光时刻</div>
+                    <div class="video-desc">最燃舞台片段，观众掌声不断，气氛达到顶点</div>
+                </div>
+            </div>
+
+            <!-- 视频3 幕后 -->
+            <div class="video-card" data-cate="all behind">
+                
+                <video class="video-player" controls preload="metadata">
+                    <source src="video/C1.mp4" type="video/mp4">
+                    您的浏览器不支持视频播放
+                </video>
+                <div class="video-info">
+                    <div class="video-title">幕后花絮 · 真实瞬间</div>
+                    <div class="video-desc">演员们认真排练，反复打磨细节，只为呈现最好舞台</div>
+                </div>
+            </div>
+            <div class="video-card" data-cate="all behind">
+                
+                <video class="video-player" controls preload="metadata">
+                    <source src="video/C2.mp4" type="video/mp4">
+                    您的浏览器不支持视频播放
+                </video>
+                <div class="video-info">
+                    <div class="video-title">幕后花絮 · 真实瞬间</div>
+                    <div class="video-desc">演员们认真排练，反复打磨细节，只为呈现最好舞台</div>
+                </div>
+            </div>
+            <div class="video-card" data-cate="all behind">
+                
+                <video class="video-player" controls preload="metadata">
+                    <source src="video/C3.mp4" type="video/mp4">
+                    您的浏览器不支持视频播放
+                </video>
+                <div class="video-info">
+                    <div class="video-title">幕后花絮 · 真实瞬间</div>
+                    <div class="video-desc">演员们认真排练，反复打磨细节，只为呈现最好舞台</div>
+                </div>
+            </div>
+            <div class="video-card" data-cate="all hot">
+                
+                <video class="video-player" controls preload="metadata">
+                    <source src="video/H2.mp4" type="video/mp4">
+                    您的浏览器不支持视频播放
+                </video>
+                <div class="video-info">
+                    <div class="video-title">混剪高光 · 欢乐炸场</div>
+                    <div class="video-desc">相遇重要还是结局重要</div>
+                </div>
+            </div>
+            <div class="video-card" data-cate="all behind">
+                
+                <video class="video-player" controls preload="metadata">
+                    <source src="video/C4.mp4" type="video/mp4">
+                    您的浏览器不支持视频播放
+                </video>
+                <div class="video-info">
+                    <div class="video-title">幕后花絮 · 真实瞬间</div>
+                    <div class="video-desc">演员们认真排练，反复打磨细节，只为呈现最好舞台</div>
+                </div>
+            </div>
+            <div class="video-card" data-cate="all behind">
+                
+                <video class="video-player" controls preload="metadata">
+                    <source src="video/C5.mp4" type="video/mp4">
+                    您的浏览器不支持视频播放
+                </video>
+                <div class="video-info">
+                    <div class="video-title">幕后花絮 · 真实瞬间</div>
+                    <div class="video-desc">演员们认真排练，反复打磨细节，只为呈现最好舞台</div>
+                </div>
+            </div>
+            <div class="video-card" data-cate="all highlight">
+                
+                <video class="video-player" controls preload="metadata">
+                    <source src="video/D2.mp4" type="video/mp4">
+                    您的浏览器不支持视频播放
+                </video>
+                <div class="video-info">
+                    <div class="video-title">全场欢呼 · 高光时刻</div>
+                    <div class="video-desc">最燃舞台片段，观众掌声不断，气氛达到顶点</div>
+                </div>
+            </div>
+            <div class="video-card" data-cate="all behind">
+                
+                <video class="video-player" controls preload="metadata">
+                    <source src="video/C6.mp4" type="video/mp4">
+                    您的浏览器不支持视频播放
+                </video>
+                <div class="video-info">
+                    <div class="video-title">幕后花絮 · 真实瞬间</div>
+                    <div class="video-desc">演员们认真排练，反复打磨细节，只为呈现最好舞台</div>
+                </div>
+            </div>
+            <div class="video-card" data-cate="all hot">
+                
+                <video class="video-player" controls preload="metadata">
+                    <source src="video/H3.mp4" type="video/mp4">
+                    您的浏览器不支持视频播放
+                </video>
+                <div class="video-info">
+                    <div class="video-title">混剪高光 · 全能炸场</div>
+                    <div class="video-desc">热血混剪高能回顾</div>
+                </div>
+            </div>
+            <div class="video-card" data-cate="all laugh">
+                
+                <video class="video-player" controls preload="metadata">
+                    <source src="video/X2.mp4" type="video/mp4">
+                    您的浏览器不支持视频播放
+                </video>
+                <div class="video-info">
+                    <div class="video-title">喜人聚会 · 名场面</div>
+                    <div class="video-desc">方言局</div>
+                </div>
+            </div>
+
+            <!-- 视频4 高光 -->
+            <div class="video-card" data-cate="all highlight">
+                
+                <video class="video-player" controls preload="metadata">
+                    <source src="video/D1.mp4" type="video/mp4">
+                    您的浏览器不支持视频播放
+                </video>
+                <div class="video-info">
+                    <div class="video-title">全场欢呼 · 高光时刻</div>
+                    <div class="video-desc">最燃舞台片段，观众掌声不断，气氛达到顶点</div>
+                </div>
+            </div>
+
+            <!-- 视频5 爆笑+热门 -->
+            
+
+            <!-- 视频6 幕后+高光 -->
+            
+            <div class="video-card" data-cate="all hot">
+                
+                <video class="video-player" controls preload="metadata">
+                    <source src="video/H4.mp4" type="video/mp4">
+                    您的浏览器不支持视频播放
+                </video>
+                <div class="video-info">
+                    <div class="video-title">混剪高光 · 官方整活</div>
+                    <div class="video-desc">五十名喜剧囚徒共创高能</div>
+                </div>
+            </div>
+            <div class="video-card" data-cate="all laugh">
+                
+                <video class="video-player" controls preload="metadata">
+                    <source src="video/X3.mp4" type="video/mp4">
+                    您的浏览器不支持视频播放
+                </video>
+                <div class="video-info">
+                    <div class="video-title">喜人聚会 · 名场面</div>
+                    <div class="video-desc">爆笑狼人杀</div>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+</div>
+
+<!-- 底部 -->
+<footer>
+            <p>喜人奇妙夜</p>
+            <p>AMAZING NIGHT</p>
+        </footer>
+
+<script>
+    // 分类切换逻辑
+    const tabItems = document.querySelectorAll('.tab-item');
+    const videoCards = document.querySelectorAll('.video-card');
+
+    tabItems.forEach(tab => {
+        tab.addEventListener('click', () => {
+            // 切换选中样式
+            tabItems.forEach(item => item.classList.remove('active'));
+            tab.classList.add('active');
+
+            const cate = tab.dataset.cate;
+
+            // 筛选显示
+            videoCards.forEach(card => {
+                if (cate === 'all' || card.dataset.cate.includes(cate)) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        });
+    });
+</script>
+
+</body>
+</html>
